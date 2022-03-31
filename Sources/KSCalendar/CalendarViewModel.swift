@@ -49,16 +49,18 @@ class CalendarViewModel: ObservableObject {
         self.selectedDate = currentDate
         self.calendarData = calendarData
         self.monthViewIsHidded = hideMonthView
+        setCalendarDataSubscriber()
+    }
+    
+    private func setCalendarDataSubscriber() {
         calendarData.updated
             .receive(on: RunLoop.main)
             .sink { [unowned self] _ in
-                print("timer is alive and kicking")
-                //                self.selectedDate = Date()
-                //                self.update.toggle()
+                print("calendar data updated")
+                self.update.toggle()
             }
             .store(in: &cancellables)
     }
-    
     
     // MARK: - API
     private(set) var isDetail = true {

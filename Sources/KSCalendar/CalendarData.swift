@@ -9,34 +9,39 @@ import Foundation
 import Combine
 
 
-protocol CalendarDataAPI {
-    
-    func dayItems(for month: Int, and year: Int) -> [CalendarData.CalendarDayItem]
-}
-
-open class CalendarData: CalendarDataAPI {
+open class CalendarData {
     
     public struct CalendarDayItem {
         let day: Int
         let hasPrimaryEvent: Bool
         let hasSecondaryEvent: Bool
+        
+        public init(day: Int, hasPrimaryEvent: Bool, hasSecondaryEvent: Bool) {
+            self.day = day
+            self.hasPrimaryEvent = hasPrimaryEvent
+            self.hasSecondaryEvent = hasSecondaryEvent
+        }
     }
     
     final private let _updated = PassthroughSubject<Void, Never>()
-    final var updated: PassthroughSubject<Void, Never> { _updated }
+    final public var updated: PassthroughSubject<Void, Never> { _updated }
     
     public init() {}
     
     
     // MARK: - API
-    func dayItems(for month: Int, and year: Int) -> [CalendarDayItem] {
+    ///  A  method to receive all day items for given month  month and year
+    /// - Parameters:
+    ///   - month: Calendar month 1...12
+    ///   - year: Calendar year, for example 2022
+    /// - Returns: CalendarDayItems on Array
+    open func dayItems(for month: Int, and year: Int) -> [CalendarDayItem] {
 
         return []
     }
     
-    
-    // MARK: - private methods
-    final private func calendarDataHasBeenUpdated() {
+    /// Calling this method starts CalendarView update. Should be called when calendar data has been updated
+    final public func calendarDataHasBeenUpdated() {
         _updated.send()
     }
     
