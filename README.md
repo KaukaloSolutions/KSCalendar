@@ -4,4 +4,4 @@ A SwiftUI calendar with similar look as DatePicker. Allows selection of date and
 
 An subclass from CalendarData is needed to show dayitems on calendar. Whenever calendar data is updated function calendarDataHasBeenUpdated() needs to be called on subclass.
 
-Also subclass should override default implementation of func dayItems(for:and:) -> [CalendarDayiItem] allowing Calendar to show if there are items on calendar for specific days.
+Also subclass should override default implementation of func dayItems(for:and:) -> [CalendarDayiItem] allowing Calendar to show if there are events on calendar for specific days.

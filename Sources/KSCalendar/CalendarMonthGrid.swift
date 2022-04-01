@@ -56,7 +56,7 @@ struct CalendarMonthGrid: View {
         }
     }
     
-    private func date(for item: CalendarViewModel.DayItem, using size: CGSize) -> some View {
+    private func date(for item: DayItem, using size: CGSize) -> some View {
         ZStack {
             Group {
                 if(item.isCurrentDate) {
@@ -75,15 +75,15 @@ struct CalendarMonthGrid: View {
         }
     }
     
-    private func events(for item: CalendarViewModel.DayItem, using size: CGSize) -> some View {
+    private func events(for item: DayItem, using size: CGSize) -> some View {
         HStack(alignment: .bottom, spacing: 2) {
             Spacer()
-            if(item.hasEvent) {
+            if(item.hasPrimaryEvent) {
                 Circle()
                     .frame(width: size.width * Constants.circleScale, height: size.height  * Constants.circleScale, alignment: .center)
                     .foregroundColor(.blue)
             }
-            if(item.hasHealthEvent) {
+            if(item.hasSecondaryEvent) {
                 Circle()
                     .frame(width: size.width * Constants.circleScale, height: size.height  * Constants.circleScale, alignment: .center)
                     .foregroundColor(.red)

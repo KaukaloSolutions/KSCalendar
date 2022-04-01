@@ -9,19 +9,20 @@ import Foundation
 import Combine
 
 
-open class CalendarData {
+public struct CalendarDayItem {
+    let day: Int
+    let hasPrimaryEvent: Bool
+    let hasSecondaryEvent: Bool
     
-    public struct CalendarDayItem {
-        let day: Int
-        let hasPrimaryEvent: Bool
-        let hasSecondaryEvent: Bool
-        
-        public init(day: Int, hasPrimaryEvent: Bool, hasSecondaryEvent: Bool) {
-            self.day = day
-            self.hasPrimaryEvent = hasPrimaryEvent
-            self.hasSecondaryEvent = hasSecondaryEvent
-        }
+    public init(day: Int, hasPrimaryEvent: Bool, hasSecondaryEvent: Bool) {
+        self.day = day
+        self.hasPrimaryEvent = hasPrimaryEvent
+        self.hasSecondaryEvent = hasSecondaryEvent
     }
+    
+}
+
+open class CalendarData {
     
     final private let _updated = PassthroughSubject<Void, Never>()
     final public var updated: PassthroughSubject<Void, Never> { _updated }
@@ -35,7 +36,7 @@ open class CalendarData {
     ///   - month: Calendar month 1...12
     ///   - year: Calendar year, for example 2022
     /// - Returns: CalendarDayItems on Array
-    open func dayItems(for month: Int, and year: Int) -> [CalendarDayItem] {
+    open func calendarDayItems(for month: Int, and year: Int) -> [CalendarDayItem] {
 
         return []
     }

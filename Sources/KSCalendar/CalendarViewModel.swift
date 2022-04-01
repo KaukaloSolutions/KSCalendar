@@ -9,17 +9,19 @@ import Foundation
 import Combine
 
 
+struct DayItem: Identifiable {
+    let id: Int
+    let day: String?
+    var isCurrentDate = false
+    var isSelectedDate = false
+    var hasPrimaryEvent = false
+    var hasSecondaryEvent = false
+    
+}
+
 class CalendarViewModel: ObservableObject {
     
     // MARK: - properties and init()
-    struct DayItem: Identifiable {
-        let id: Int
-        let day: String?
-        let isCurrentDate: Bool
-        let isSelectedDate: Bool
-        let hasEvent: Bool
-        let hasHealthEvent: Bool
-    }
     
     private var calendar: Calendar = {
         var calendar = Calendar.current
@@ -92,9 +94,31 @@ class CalendarViewModel: ObservableObject {
     }
 
     func items(for month: Int, and year: Int) -> [DayItem] {
-        var calendarItems = fillDates(for: month, and: year)
-        calendarItems.append(contentsOf: dayItems(for: month, and: year))
-        return calendarItems
+        let calendarDayItems = calendarData.calendarDayItems(for: month, and: year)
+        return dayItemsForMonthView(for: month, and: year)
+            .map { item in
+                guard item.day != nil else { return item }
+                var dayItem = item
+                if let calendarDayItem = calendarDayItems.first(where: { String($0.day) == dayItem.day }) {
+                    dayItem.hasPrimaryEvent = calendarDayItem.hasPrimaryEvent
+                    dayItem.hasSecondaryEvent = calendarDayItem.hasSecondaryEvent
+                }
+                dayItem.isCurrentDate = calendar.isDate(currentDate,
+                                                        equalTo: DateComponents(calendar: calendar,
+                                                                                timeZone: calendar.timeZone,
+                                                                                year: year,
+                                                                                month: month,
+                                                                                day: Int(dayItem.day!)).date!,
+                                                        toGranularity: .day)
+                dayItem.isSelectedDate = calendar.isDate(selectedDate,
+                                                         equalTo: DateComponents(calendar: calendar,
+                                                                                 timeZone: calendar.timeZone,
+                                                                                 year: year,
+                                                                                 month: month,
+                                                                                 day: Int(dayItem.day!)).date!,
+                                                         toGranularity: .day)
+                return dayItem
+            }
     }
     
     func didSelect(day: Int) {
@@ -167,8 +191,6 @@ class CalendarViewModel: ObservableObject {
         return (weekDay - calendar.firstWeekday + 7) % 7
     }
     
-    
-    
     private func monthAndYear() -> String {
         var result = ""
         result.append(calendar.monthSymbols[calendar.component(.month, from: selectedDate) - 1])
@@ -176,48 +198,20 @@ class CalendarViewModel: ObservableObject {
         return result
     }
     
-    private func fillDates(for month: Int, and year: Int) -> [DayItem] {
+    private func dayItemsForMonthView(for month: Int, and year: Int) -> [DayItem] {
+        let startOfWeekFillDates = startOfWeekFillDates(for: month, and: year)
+        let calendarDates = daysRange(for: month, and: year)
+            .map { DayItem(id: startOfWeekFillDates.count + $0, day: String($0))}
+        return startOfWeekFillDates + calendarDates
+    }
+    
+    private func startOfWeekFillDates(for month: Int, and year: Int) -> [DayItem] {
         (0..<firstDay(on: month, in: year))
-            .map { DayItem(id: $0,
-                           day: nil,
-                           isCurrentDate: false,
-                           isSelectedDate: false,
-                           hasEvent: false,
-                           hasHealthEvent: false)
+            .map { DayItem(id: $0, day: nil)
             }
     }
     
-    private func dayItems(for month: Int, and year: Int) -> [DayItem] {
-        
-                daysRange(in: month, on: year)
-                    .map { DayItem(id: firstDay(on: month, in: year) + $0,
-                                   day: String($0),
-                                   isCurrentDate: calendar.isDate(currentDate,
-                                                                  equalTo: DateComponents(calendar: calendar,
-                                                                                          timeZone: calendar.timeZone,
-                                                                                          year: year,
-                                                                                          month: month,
-                                                                                          day: $0).date!,
-                                                                  toGranularity: .day),
-                                   isSelectedDate: calendar.isDate(selectedDate,
-                                                                   equalTo: DateComponents(calendar: calendar,
-                                                                                           timeZone: calendar.timeZone,
-                                                                                           year: year,
-                                                                                           month: month,
-                                                                                           day: $0).date!,
-                                                                   toGranularity: .day),
-                                   hasEvent: true,
-                                   hasHealthEvent: $0 % 2 == 1) }
-        
-        
-//        let items = calendarData.dayItems(for: month, and: year)
-//        daysRange(in: month, on: year).map {
-//
-//        }
-//        return []
-    }
-    
-    private func daysRange(in month: Int, on year: Int) -> Range<Int> {
+    private func daysRange(for  month: Int, and year: Int) -> Range<Int> {
         calendar.range(of: .day,
                        in: .month,
                        for: DateComponents(calendar: calendar,
