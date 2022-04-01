@@ -46,16 +46,6 @@ open class CalendarData {
         _updated.send()
     }
     
-//    private func daysRange(in month: Int, on year: Int) -> Range<Int> {
-//        calendar.range(of: .day,
-//                       in: .month,
-//                       for: DateComponents(calendar: calendar,
-//                                           timeZone: calendar.timeZone,
-//                                           year: year,
-//                                           month: month,
-//                                           day: 1).date!)!
-//    }
-    
 }
 
 
