@@ -9,6 +9,10 @@ import Foundation
 import Combine
 
 
+public protocol KSCalendarDelegate: AnyObject {
+    func didChangeView(toMonthView: Bool)
+}
+
 struct DayItem: Identifiable {
     let id: Int
     let day: String?
@@ -42,15 +46,19 @@ class CalendarViewModel: ObservableObject {
     private(set) var monthViewIsHidded: Bool
     private var cancellables: Set<AnyCancellable> = []
     
+    private weak var delegate: KSCalendarDelegate?
+    
     /// Initialization for CalendarViewModel
     /// - Parameters:
     ///   - calendarData: An object having calendar data inheriting from CalendarData
     ///   - hideMonthView: if monthView needs to be hidden set true, default = false
-    init(calendarData: CalendarData, hideMonthView: Bool = false) {
+    ///   - delegate: delegate object conforming to KSCalendarDelegate, default = nil
+    init(calendarData: CalendarData, hideMonthView: Bool = false, delegate: KSCalendarDelegate? = nil) {
         self.currentDate = calendar.startOfDay(for: Date())
         self.selectedDate = currentDate
         self.calendarData = calendarData
         self.monthViewIsHidded = hideMonthView
+        self.delegate = delegate
         setCalendarDataSubscriber()
     }
     
@@ -66,8 +74,9 @@ class CalendarViewModel: ObservableObject {
     
     // MARK: - API
     private(set) var isDetail = true {
-        didSet {
+        willSet {
             update.toggle()
+            delegate?.didChangeView(toMonthView: newValue)
         }
     }
     
