@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 
-public struct CalendarDayItem {
+public struct KSCalendarDayItem {
     let day: Int
     let hasPrimaryEvent: Bool
     let hasSecondaryEvent: Bool
@@ -36,7 +36,7 @@ open class KSCalendarData {
     ///   - month: Calendar month 1...12
     ///   - year: Calendar year, for example 2022
     /// - Returns: CalendarDayItems on Array
-    open func calendarDayItems(for month: Int, and year: Int) -> [CalendarDayItem] {
+    open func calendarDayItems(for month: Int, and year: Int) -> [KSCalendarDayItem] {
 
         return []
     }
