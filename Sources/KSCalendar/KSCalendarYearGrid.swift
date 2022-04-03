@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct CalendarYearGrid: View {
+struct KSCalendarYearGrid: View {
     
-    @EnvironmentObject var calendar: CalendarViewModel
+    @EnvironmentObject var calendar: KSCalendarViewModel
     
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
@@ -31,7 +31,7 @@ struct CalendarYearGrid: View {
                             .font(.callout)
                         Spacer()
                     }
-                    CalendarMonthGrid(month: quarter.rawValue * 3 + index + 1,
+                    KSCalendarMonthGrid(month: quarter.rawValue * 3 + index + 1,
                                       year: calendar.selectedYear)
                         .disabled(true)
                         .onTapGesture {
@@ -57,9 +57,9 @@ struct CalendarYearGrid_Previews: PreviewProvider {
     
     struct CalendarYearGridWrapper: View {
         
-        @StateObject var calendar = CalendarViewModel(calendarData: CalendarData())
+        @StateObject var calendar = KSCalendarViewModel(calendarData: KSCalendarData())
         var body: some View {
-            CalendarYearGrid()
+            KSCalendarYearGrid()
                 .environmentObject(calendar)
         }
     }

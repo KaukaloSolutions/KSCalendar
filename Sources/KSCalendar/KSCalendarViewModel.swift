@@ -28,7 +28,7 @@ struct DayItem: Identifiable {
     
 }
 
-class CalendarViewModel: ObservableObject {
+class KSCalendarViewModel: ObservableObject {
     
     // MARK: - properties and init()
     
@@ -41,7 +41,7 @@ class CalendarViewModel: ObservableObject {
     
     @Published private var update = false
     
-    private var calendarData: CalendarData
+    private var calendarData: KSCalendarData
     private var currentDate: Date
     private var selectedDate: Date {
         willSet {
@@ -59,7 +59,7 @@ class CalendarViewModel: ObservableObject {
     ///   - calendarData: An object having calendar data inheriting from CalendarData
     ///   - hideMonthView: if monthView needs to be hidden set true, default = false
     ///   - delegate: delegate object conforming to KSCalendarDelegate, default = nil
-    init(calendarData: CalendarData, hideMonthView: Bool = false, delegate: KSCalendarDelegate? = nil) {
+    init(calendarData: KSCalendarData, hideMonthView: Bool = false, delegate: KSCalendarDelegate? = nil) {
         self.currentDate = calendar.startOfDay(for: Date())
         self.selectedDate = currentDate
         self.calendarData = calendarData

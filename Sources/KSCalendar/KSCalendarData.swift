@@ -22,7 +22,7 @@ public struct CalendarDayItem {
     
 }
 
-open class CalendarData {
+open class KSCalendarData {
     
     final private let _updated = PassthroughSubject<Void, Never>()
     final public var updated: PassthroughSubject<Void, Never> { _updated }
@@ -41,7 +41,7 @@ open class CalendarData {
         return []
     }
     
-    /// Calling this method starts CalendarView update. Should be called when calendar data has been updated
+    /// Calling this method starts KSCalendarView update. Should be called when calendar data has been updated
     final public func calendarDataHasBeenUpdated() {
         _updated.send()
     }

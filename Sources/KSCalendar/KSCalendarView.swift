@@ -10,20 +10,20 @@ import SwiftUI
 
 
 /// A calendar having similar look as DatePicker. Calendar is capable to show
-/// two individual events for each date i.e. primary and secondary.  CalendarView requires
+/// two individual events for each date i.e. primary and secondary.  KSCalendarView requires
 /// to have an object inheriting from CalendarData that is responsible for individual daily items.
 ///
 /// Basic initialization:
 ///     CalendarView(:CalendarData)
-public struct CalendarView: View {
+public struct KSCalendarView: View {
     
-    @StateObject private var calendar: CalendarViewModel
+    @StateObject private var calendar: KSCalendarViewModel
     
     /// CalendarView init
     /// - Parameter calendar: an object inferitng from CalendarData
     /// - Parameter hideMonthView: in case monthView is not needed, set true, default = false
-    public init(calendar: CalendarData, hideMonthView: Bool = false, delegate: KSCalendarDelegate? = nil) {
-        self._calendar = StateObject(wrappedValue: CalendarViewModel(calendarData: calendar,
+    public init(calendar: KSCalendarData, hideMonthView: Bool = false, delegate: KSCalendarDelegate? = nil) {
+        self._calendar = StateObject(wrappedValue: KSCalendarViewModel(calendarData: calendar,
                                                                      hideMonthView: hideMonthView,
                                                                      delegate: delegate))
     }
@@ -75,13 +75,13 @@ public struct CalendarView: View {
             if calendar.monthViewIsHidded {
                 EmptyView()
             } else {
-                CalendarMonthGrid(month: calendar.selectedMonth,
+                KSCalendarMonthGrid(month: calendar.selectedMonth,
                                   year: calendar.selectedYear)
                     .gesture(swipeGesture(left: calendar.nextMonth,
                                           right: calendar.previousMonth))
             }
         } else {
-            CalendarYearGrid()
+            KSCalendarYearGrid()
                 .gesture(swipeGesture(left: calendar.nextYear,
                                       right: calendar.previousYear))
         }
@@ -109,6 +109,6 @@ private struct CalendarItem: Identifiable {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        CalendarView(calendar: CalendarData())
+        KSCalendarView(calendar: KSCalendarData())
     }
 }

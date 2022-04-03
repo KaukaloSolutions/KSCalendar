@@ -7,9 +7,9 @@
 
 import SwiftUI
 
-struct CalendarMonthGrid: View {
+struct KSCalendarMonthGrid: View {
     
-    @EnvironmentObject var calendar: CalendarViewModel
+    @EnvironmentObject var calendar: KSCalendarViewModel
     var month: Int
     var year: Int
     
@@ -118,9 +118,9 @@ private struct Constants {
 struct CalendarMonthGrid_Previews: PreviewProvider {
     
     struct CalendarMonthGridWrapper: View {
-        @StateObject var calendar = CalendarViewModel(calendarData: CalendarData())
+        @StateObject var calendar = KSCalendarViewModel(calendarData: KSCalendarData())
         var body: some View {
-            CalendarMonthGrid(month: 1, year: 2022)
+            KSCalendarMonthGrid(month: 1, year: 2022)
                 .environmentObject(calendar)
         }
     }
