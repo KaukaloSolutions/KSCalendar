@@ -11,6 +11,11 @@ import Combine
 
 public protocol KSCalendarDelegate: AnyObject {
     func didChangeView(toMonthView: Bool)
+    func didChangeDate(to date: Date)
+}
+
+public extension Notification.Name {
+    static var ksCalendar = Notification.Name("KSCalendar")
 }
 
 struct DayItem: Identifiable {
@@ -41,6 +46,7 @@ class CalendarViewModel: ObservableObject {
     private var selectedDate: Date {
         willSet {
             update.toggle()
+            sendDateChange(with: newValue)
         }
     }
     private(set) var monthViewIsHidded: Bool
@@ -76,7 +82,7 @@ class CalendarViewModel: ObservableObject {
     private(set) var isDetail = true {
         willSet {
             update.toggle()
-            delegate?.didChangeView(toMonthView: newValue)
+            sendIsDetailChange(with: newValue)
         }
     }
     
@@ -228,6 +234,20 @@ class CalendarViewModel: ObservableObject {
                                            year: year,
                                            month: month,
                                            day: 1).date!)!
+    }
+    
+    private func sendIsDetailChange(with newValue: Bool) {
+        delegate?.didChangeView(toMonthView: newValue)
+        NotificationCenter.default.post(name: Notification.Name.ksCalendar,
+                                        object: self,
+                                        userInfo: ["isDetail": newValue])
+    }
+    
+    private func sendDateChange(with date: Date) {
+        delegate?.didChangeDate(to: date)
+        NotificationCenter.default.post(name: Notification.Name.ksCalendar,
+                                        object: self,
+                                        userInfo: ["date": date])
     }
     
     
