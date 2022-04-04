@@ -5,13 +5,15 @@
 //  Created by Janne Jussila on 28.1.2022.
 //
 
-import Foundation
+//import Foundation
 import Combine
+import UIKit
 
 
 public protocol KSCalendarDelegate: AnyObject {
     func didChangeView(toMonthView: Bool)
     func didChangeDate(to date: Date)
+    func didChangeGeometry(to size: CGSize)
 }
 
 public extension Notification.Name {
@@ -181,6 +183,10 @@ class KSCalendarViewModel: ObservableObject {
     
     func monthYearToggle() {
         isDetail.toggle()
+    }
+    
+    func currentSize(_ size: CGSize) {
+        delegate?.didChangeGeometry(to: size)
     }
     
     
