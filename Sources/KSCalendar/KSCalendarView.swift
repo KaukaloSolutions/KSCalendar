@@ -29,12 +29,15 @@ public struct KSCalendarView: View {
     }
     
     public var body: some View {
-        VStack {
-            calendarSelection
-                .padding([.horizontal, .bottom])
-            calendar(mode: calendar.isDetail)
-                .padding(.horizontal)
-            Spacer()
+        GeometryReader { geometry in
+            let _ = calendar.currentSize(geometry.size)
+            VStack {
+                calendarSelection
+                    .padding([.horizontal, .bottom])
+                calendar(mode: calendar.isDetail)
+                    .padding(.horizontal)
+                Spacer()
+            }
         }
         .environmentObject(calendar)
     }
