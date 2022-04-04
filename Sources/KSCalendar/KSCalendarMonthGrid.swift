@@ -16,7 +16,6 @@ struct KSCalendarMonthGrid: View {
     
     var body: some View {
         GeometryReader { geometry in
-            let _ = calendar.currentSize(geometry.size)
             VStack {
                 weekDays(with: geometry)
                 dayItems(with: geometry)
