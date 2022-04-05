@@ -38,12 +38,6 @@ struct KSCalendarMonthGrid: View {
         }
     }
     
-    private func weekdays() -> [GridItem] {
-        var gridItem = GridItem()
-        gridItem.spacing = 0
-        return [gridItem]
-    }
-    
     private var dayItems: some View {
         LazyVGrid(columns: calendarMonthGridItems(), alignment: .center, spacing: 0) {
             ForEach(calendar.items(for: month, and: year)) { item in
@@ -84,8 +78,8 @@ struct KSCalendarMonthGrid: View {
                     HStack(spacing: 2) {
                         eventCircles(for: item)
                     }
-                    .scaleEffect(0.4)
-                    .offset(CGSize(width: 0, height: geometry.size.height / 3))
+                    .scaleEffect(Constants.circleScale)
+                    .offset(CGSize(width: 0, height: geometry.size.height / Constants.circleOffset))
                 }
             }
     }
@@ -126,6 +120,8 @@ struct KSCalendarMonthGrid: View {
 private struct Constants {
     static let fontScale: CGFloat = 0.5
     static let weekdayFontScale: CGFloat = 0.7
+    static let circleScale: CGFloat = 0.4
+    static let circleOffset: CGFloat = 3
 }
 
 
