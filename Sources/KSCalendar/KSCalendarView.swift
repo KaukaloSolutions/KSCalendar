@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  Calendar
 //
-//  Created by Janne Jussila on 26.1.2022.
+//  Created by Janne Jussila /Users/jannejussila/Desktop/Developer/Kaukalo/KaukaloApps/Calendar/KSCalendar/Sources/KSCalendaron 26.1.2022.
 //
 
 import SwiftUI
@@ -29,17 +29,15 @@ public struct KSCalendarView: View {
     }
     
     public var body: some View {
-        GeometryReader { geometry in
-            let _ = calendar.currentSize(geometry.size)
+        VStack {
             VStack {
                 calendarSelection
                     .padding([.horizontal, .bottom])
                 calendar(mode: calendar.isDetail)
                     .padding(.horizontal)
-                Spacer()
             }
+            .environmentObject(calendar)
         }
-        .environmentObject(calendar)
     }
     
     private var calendarSelection: some View {
@@ -79,9 +77,9 @@ public struct KSCalendarView: View {
                 EmptyView()
             } else {
                 KSCalendarMonthGrid(month: calendar.selectedMonth,
-                                  year: calendar.selectedYear)
-                    .gesture(swipeGesture(left: calendar.nextMonth,
-                                          right: calendar.previousMonth))
+                                    year: calendar.selectedYear)
+                .gesture(swipeGesture(left: calendar.nextMonth,
+                                      right: calendar.previousMonth))
             }
         } else {
             KSCalendarYearGrid()
@@ -115,3 +113,4 @@ struct ContentView_Previews: PreviewProvider {
         KSCalendarView(calendar: KSCalendarData())
     }
 }
+

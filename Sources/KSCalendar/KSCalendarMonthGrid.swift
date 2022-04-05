@@ -13,40 +13,46 @@ struct KSCalendarMonthGrid: View {
     var month: Int
     var year: Int
     
-    
     var body: some View {
-        GeometryReader { geometry in
-            VStack {
-                weekDays(with: geometry)
-                dayItems(with: geometry)
-            }
+        VStack {
+            weekDays
+            dayItems
         }
     }
     
-    private func weekDays(with geometry: GeometryProxy) -> some View {
+    private var weekDays: some View {
         HStack(spacing: 0) {
             ForEach(calendar.weekDays, id: \.self) { weekDay in
-                Text(weekDay)
-                    .frame(width: geometry.size.width / CGFloat(7))
-                    .font(.system(size: geometry.size.width / CGFloat(7) * Constants.weekdayFontScale))
-                    .foregroundColor(.gray)
+                Rectangle()
+                    .fill(Color.clear)
+                    .aspectRatio(2, contentMode: .fit)
+                    .overlay {
+                        GeometryReader { geometry in
+                            Text(weekDay)
+                                .foregroundColor(.gray)
+                                .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+                                .font(.system(size: geometry.size.height * Constants.weekdayFontScale))
+                        }
+                    }
             }
         }
-        .frame(width: geometry.size.width, alignment: .center)
     }
     
-    // not really needed as ViewBuilder, but easier to understand idea
-    @ViewBuilder private func dayItems(with geometry: GeometryProxy) -> some View {
-        let size = sizeForDay(in: geometry.size)
-        LazyVGrid(columns: [calendarMonthGridItem(for: size)],
-                  alignment: .center,
-                  spacing: 0) {
+    private func weekdays() -> [GridItem] {
+        var gridItem = GridItem()
+        gridItem.spacing = 0
+        return [gridItem]
+    }
+    
+    private var dayItems: some View {
+        LazyVGrid(columns: calendarMonthGridItems(), alignment: .center, spacing: 0) {
             ForEach(calendar.items(for: month, and: year)) { item in
-                VStack(alignment: .center, spacing: 0) {
-                    date(for: item, using: size)
-                    events(for: item, using: size)
+                ZStack(alignment: .center) {
+                    date(for: item)
+                    events(for: item)
                 }
-                .frame(width: size.width, height: size.height, alignment:  .center)
+                .aspectRatio(1, contentMode: .fill)
+                .padding(calendar.isDetail ? 5 : 0)
                 .onTapGesture {
                     guard let day = item.day else { return }
                     guard calendar.isDetail else { return }
@@ -56,47 +62,59 @@ struct KSCalendarMonthGrid: View {
         }
     }
     
-    private func date(for item: DayItem, using size: CGSize) -> some View {
-        ZStack {
-            Group {
-                if(item.isCurrentDate) {
-                    Circle()
-                        .fill((Color.red))
-                } else if(item.isSelectedDate && calendar.isDetail) {
-                    Circle()
-                        .fill(Color.purple)
+    private func date(for item: DayItem) -> some View {
+        Circle()
+            .fill(item.isCurrentDate ? Color.red :
+                    (item.isSelectedDate && calendar.isDetail) ? .purple :
+                    .clear)
+            .overlay {
+                GeometryReader {geometry in
+                    Text(item.day ?? "")
+                        .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
+                        .font(.system(size: geometry.size.width * Constants.fontScale))
                 }
             }
-            .frame(width: size.width * Constants.dayCirclePaddingScale,
-                   height: size.height * Constants.dayCirclePaddingScale,
-                   alignment: .center)
-            Text(item.day ?? "")
-                .font(.system(size: size.width * Constants.fontScale))
+    }
+    
+    private func events(for item: DayItem) -> some View {
+        Rectangle()
+            .fill(Color.clear)
+            .overlay {
+                GeometryReader { geometry in
+                    HStack(spacing: 2) {
+                        eventCircles(for: item)
+                    }
+                    .scaleEffect(0.4)
+                    .offset(CGSize(width: 0, height: geometry.size.height / 3))
+                }
+            }
+    }
+    
+    // bit dummy way to get always evenly distributed circles
+    @ViewBuilder private func eventCircles(for item: DayItem) -> some View {
+        if item.hasPrimaryEvent && item.hasSecondaryEvent {
+            Circle().foregroundColor(.blue)
+            Circle().foregroundColor(.clear)
+            Circle().foregroundColor(.red)
+        } else if item.hasPrimaryEvent {
+            Circle().foregroundColor(.clear)
+            Circle().foregroundColor(.blue)
+            Circle().foregroundColor(.clear)
+        } else if item.hasSecondaryEvent {
+            Circle().foregroundColor(.clear)
+            Circle().foregroundColor(.red)
+            Circle().foregroundColor(.clear)
+        } else {
+            EmptyView()
         }
     }
     
-    private func events(for item: DayItem, using size: CGSize) -> some View {
-        HStack(alignment: .bottom, spacing: 2) {
-            Spacer()
-            if(item.hasPrimaryEvent) {
-                Circle()
-                    .frame(width: size.width * Constants.circleScale, height: size.height  * Constants.circleScale, alignment: .center)
-                    .foregroundColor(.blue)
-            }
-            if(item.hasSecondaryEvent) {
-                Circle()
-                    .frame(width: size.width * Constants.circleScale, height: size.height  * Constants.circleScale, alignment: .center)
-                    .foregroundColor(.red)
-            }
-            Spacer()
-        }
-    }
-    
-    private func calendarMonthGridItem(for size: CGSize) -> GridItem {
-        var gridItem = GridItem(.adaptive(minimum: size.width, maximum: size.width))
+    private func calendarMonthGridItems() -> [GridItem] {
+        var gridItem = GridItem()
         gridItem.spacing = 0
-        return gridItem
+        return (0...6).map { _ in gridItem }
     }
+    
     
     private func sizeForDay(in size: CGSize) -> CGSize {
         let width = floor(size.width / CGFloat(7))
@@ -106,12 +124,8 @@ struct KSCalendarMonthGrid: View {
 }
 
 private struct Constants {
-    static let padScale: CGFloat = 30
-    static let fontScale: CGFloat = 0.35
-    static let dayCirclePaddingScale: CGFloat = 0.5
-    static let gridVerticalSpacingScale: CGFloat = 0
-    static let circleScale: CGFloat = 0.1
-    static let weekdayFontScale: CGFloat = 0.27
+    static let fontScale: CGFloat = 0.5
+    static let weekdayFontScale: CGFloat = 0.7
 }
 
 
