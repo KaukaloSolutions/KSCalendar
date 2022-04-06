@@ -26,6 +26,8 @@ open class KSCalendarData {
     
     final private let _updated = PassthroughSubject<Void, Never>()
     final public var updated: PassthroughSubject<Void, Never> { _updated }
+    final private let _hideMonthView = PassthroughSubject<Bool, Never>()
+    final public var hideMonthView: PassthroughSubject<Bool, Never> { _hideMonthView }
     
     public init() {}
     
@@ -44,6 +46,10 @@ open class KSCalendarData {
     /// Calling this method starts KSCalendarView update. Should be called when calendar data has been updated
     final public func calendarDataHasBeenUpdated() {
         _updated.send()
+    }
+    
+    final public func setMonthViewHidden(_ value: Bool) {
+        _hideMonthView.send(value)
     }
     
 }

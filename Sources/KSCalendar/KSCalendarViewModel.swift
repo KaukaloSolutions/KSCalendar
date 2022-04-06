@@ -67,15 +67,19 @@ class KSCalendarViewModel: ObservableObject {
         self.calendarData = calendarData
         self.monthViewIsHidded = hideMonthView
         self.delegate = delegate
-        setCalendarDataSubscriber()
+        setCalendarDataSubscribers()
     }
     
-    private func setCalendarDataSubscriber() {
+    private func setCalendarDataSubscribers() {
         calendarData.updated
             .receive(on: RunLoop.main)
             .sink { [unowned self] _ in
                 self.update.toggle()
             }
+            .store(in: &cancellables)
+        calendarData.hideMonthView
+            .receive(on: RunLoop.main)
+            .assign(to: \.monthViewIsHidded, on: self)
             .store(in: &cancellables)
     }
     
