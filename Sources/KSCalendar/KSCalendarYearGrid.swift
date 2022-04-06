@@ -17,7 +17,6 @@ struct KSCalendarYearGrid: View {
                 quarterView(for: quarter)
             }
             .padding(.bottom)
-            Spacer()
         }
     }
     
@@ -34,13 +33,12 @@ struct KSCalendarYearGrid: View {
                     KSCalendarMonthGrid(month: quarter.rawValue * 3 + index + 1,
                                         year: calendar.selectedYear)
                     .disabled(true)
-                        .onTapGesture {
-                            withAnimation {
-                                calendar.didSelect(month: quarter.rawValue * 3 + index + 1,
-                                                   on: calendar.selectedYear)
-                            }
+                    .onTapGesture {
+                        withAnimation {
+                            calendar.didSelect(month: quarter.rawValue * 3 + index + 1,
+                                               on: calendar.selectedYear)
                         }
-                    Spacer()
+                    }
                 }
             }
             .padding([.leading, .trailing], 2)
