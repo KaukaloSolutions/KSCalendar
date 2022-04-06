@@ -14,7 +14,7 @@ struct KSCalendarMonthGrid: View {
     var year: Int
     
     var body: some View {
-        VStack {
+        VStack(alignment: .center, spacing: 2) {
             weekDays
             dayItems
         }
