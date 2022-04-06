@@ -31,7 +31,7 @@ public struct KSCalendarView: View {
     public var body: some View {
         VStack {
             calendarSelection
-                .padding([.horizontal, .bottom])
+                .padding()
             calendar(mode: calendar.isDetail)
                 .padding(.horizontal)
         }
