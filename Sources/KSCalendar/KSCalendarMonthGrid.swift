@@ -27,6 +27,7 @@ struct KSCalendarMonthGrid: View {
                 Rectangle()
                     .fill(Color.clear)
                     .aspectRatio(2, contentMode: .fit)
+                    .layoutPriority(1)
                     .overlay {
                         GeometryReader { geometry in
                             Text(weekDay)
