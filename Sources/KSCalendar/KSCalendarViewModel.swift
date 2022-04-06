@@ -41,9 +41,12 @@ class KSCalendarViewModel: ObservableObject {
         return calendar
     }()
     
-    @Published private var update = false
+    private weak var delegate: KSCalendarDelegate?
     
+    @Published private var update = false
+    @Published private(set) var monthViewIsHidded: Bool
     private var calendarData: KSCalendarData
+    private var cancellables: Set<AnyCancellable> = []
     private var currentDate: Date
     private var selectedDate: Date {
         willSet {
@@ -51,10 +54,7 @@ class KSCalendarViewModel: ObservableObject {
             sendDateChange(with: newValue)
         }
     }
-    private(set) var monthViewIsHidded: Bool
-    private var cancellables: Set<AnyCancellable> = []
     
-    private weak var delegate: KSCalendarDelegate?
     
     /// Initialization for CalendarViewModel
     /// - Parameters:
