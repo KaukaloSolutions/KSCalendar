@@ -23,7 +23,7 @@ struct KSCalendarYearGrid: View {
         let months = calendar.months
         HStack(alignment: .top, spacing: 5) {
             ForEach(0..<3) { index in
-                VStack(alignment: .center, spacing: 0) {
+                VStack(alignment: .center, spacing: 5) {
                     HStack {
                         Text(months[quarter.rawValue * 3 + index])
                             .font(.callout)
