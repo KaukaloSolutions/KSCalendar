@@ -30,14 +30,21 @@ public struct KSCalendarView: View {
     
     public var body: some View {
         VStack {
-            VStack {
-                calendarSelection
-                    .padding([.horizontal, .bottom])
-                calendar(mode: calendar.isDetail)
-                    .padding(.horizontal)
-            }
-            .environmentObject(calendar)
+            calendarSelection
+                .padding([.horizontal, .bottom])
+            calendar(mode: calendar.isDetail)
+                .padding(.horizontal)
         }
+        .overlay {
+            GeometryReader { geometry in
+                Color.clear
+                    .preference(key: SizePreferenceKey.self, value: geometry.size)
+            }
+        }
+        .onPreferenceChange(SizePreferenceKey.self) {
+            calendar.currentSize($0)
+        }
+        .environmentObject(calendar)
     }
     
     private var calendarSelection: some View {
@@ -112,5 +119,12 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         KSCalendarView(calendar: KSCalendarData())
     }
+}
+
+struct SizePreferenceKey: PreferenceKey {
+    
+    static var defaultValue: CGSize = .zero
+    static func reduce(value: inout CGSize, nextValue: () -> CGSize) { value = nextValue() }
+    
 }
 

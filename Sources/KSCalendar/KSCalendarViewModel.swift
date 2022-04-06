@@ -74,7 +74,6 @@ class KSCalendarViewModel: ObservableObject {
         calendarData.updated
             .receive(on: RunLoop.main)
             .sink { [unowned self] _ in
-                print("calendar data updated")
                 self.update.toggle()
             }
             .store(in: &cancellables)

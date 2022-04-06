@@ -12,17 +12,16 @@ struct KSCalendarYearGrid: View {
     @EnvironmentObject var calendar: KSCalendarViewModel
     
     var body: some View {
-        VStack(alignment: .center, spacing: 0) {
+        VStack(alignment: .center, spacing: 4) {
             ForEach(Quarters.allCases) { quarter in
                 quarterView(for: quarter)
             }
-            .padding(.bottom)
         }
     }
     
     @ViewBuilder private func quarterView(for quarter: Quarters) -> some View {
         let months = calendar.months
-        HStack {
+        HStack(alignment: .top, spacing: 5) {
             ForEach(0..<3) { index in
                 VStack(alignment: .center, spacing: 0) {
                     HStack {
