@@ -54,28 +54,26 @@ public struct KSCalendarView: View {
                 Image(systemName: "chevron.right")
                     .rotationEffect(.degrees(calendar.isDetail ? 0 : 90))
             }
-            .foregroundColor(Color.blue)
             .onTapGesture {
-                withAnimation {
-                    calendar.monthYearToggle()
-                }
+                calendar.monthYearToggle()
             }
             Spacer()
             Button {
-                    calendar.isDetail ?
-                    calendar.previousMonth() :
-                    calendar.previousYear()
+                calendar.isDetail ?
+                calendar.previousMonth() :
+                calendar.previousYear()
             } label: {
                 Image(systemName: "chevron.left")
             }
             Button {
-                    calendar.isDetail ?
-                    calendar.nextMonth() :
-                    calendar.nextYear()
+                calendar.isDetail ?
+                calendar.nextMonth() :
+                calendar.nextYear()
             } label: {
                 Image(systemName: "chevron.right")
             }
         }
+        .foregroundColor(.blue)
     }
     
     @ViewBuilder func calendar(mode month: Bool) -> some View {

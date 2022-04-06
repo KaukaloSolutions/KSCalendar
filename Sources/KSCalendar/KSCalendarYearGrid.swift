@@ -33,10 +33,8 @@ struct KSCalendarYearGrid: View {
                                         year: calendar.selectedYear)
                     .disabled(true)
                     .onTapGesture {
-                        withAnimation {
-                            calendar.didSelect(month: quarter.rawValue * 3 + index + 1,
-                                               on: calendar.selectedYear)
-                        }
+                        calendar.didSelect(month: quarter.rawValue * 3 + index + 1,
+                                           on: calendar.selectedYear)
                     }
                 }
             }
