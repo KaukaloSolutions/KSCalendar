@@ -11,8 +11,8 @@ import Combine
 
 public struct KSCalendarDayItem {
     let day: Int
-    var hasPrimaryEvent: Bool
-    var hasSecondaryEvent: Bool
+    public var hasPrimaryEvent: Bool
+    public var hasSecondaryEvent: Bool
     
     public init(day: Int, hasPrimaryEvent: Bool = false, hasSecondaryEvent: Bool = false) {
         self.day = day
