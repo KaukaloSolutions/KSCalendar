@@ -34,7 +34,7 @@ class KSCalendarViewModel: ObservableObject {
     
     // MARK: - properties and init()
     
-    private var calendar: Calendar = {
+    private let calendar: Calendar = {
         var calendar = Calendar.current
         calendar.locale = Locale.current
         calendar.timeZone = TimeZone.current
