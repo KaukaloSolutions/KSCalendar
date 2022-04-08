@@ -14,6 +14,8 @@ public protocol KSCalendarDelegate: AnyObject {
     func didChangeView(toMonthView: Bool)
     func didChangeDate(to date: Date)
     func didChangeGeometry(to size: CGSize)
+    func yearChangeIntent()
+    func monthChangeIntent()
 }
 
 public extension Notification.Name {
@@ -169,18 +171,22 @@ class KSCalendarViewModel: ObservableObject {
     }
     
     func nextMonth() {
+        sendMonthChangeIntent()
         setSelectedDate(on: .month, by: 1)
     }
     
     func previousMonth() {
+        sendMonthChangeIntent()
         setSelectedDate(on: .month, by: -1)
     }
     
     func nextYear() {
+        sendYearChangeIntent()
         setSelectedDate(on: .year, by: 1)
     }
     
     func previousYear() {
+        sendYearChangeIntent()
         setSelectedDate(on: .year, by: -1)
     }
     
@@ -259,5 +265,18 @@ class KSCalendarViewModel: ObservableObject {
                                         userInfo: ["date": date])
     }
     
+    private func sendMonthChangeIntent() {
+        delegate?.monthChangeIntent()
+        NotificationCenter.default.post(name: Notification.Name.ksCalendar,
+                                        object: self,
+                                        userInfo: ["monthChangeIntent": true])
+    }
+    
+    private func sendYearChangeIntent() {
+        delegate?.yearChangeIntent()
+        NotificationCenter.default.post(name: Notification.Name.ksCalendar,
+                                        object: self,
+                                        userInfo: ["yearChangeIntent": true])
+    }
     
 }
