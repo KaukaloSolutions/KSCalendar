@@ -54,6 +54,18 @@ open class KSCalendarData {
         
 }
 
+// just for previews
+class PreviewData: KSCalendarData, KSCalendarDataSource {
+    
+    func calendarDayItems(for month: Int, and year: Int) -> [KSCalendarDayItem] {
+        return [KSCalendarDayItem(day: 1,
+                                hasPrimaryEvent: true,
+                                hasSecondaryEvent: true)]
+    }
+    
+    
+}
+
 
 
 

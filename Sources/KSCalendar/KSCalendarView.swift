@@ -115,7 +115,7 @@ private struct CalendarItem: Identifiable {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        KSCalendarView(calendar: KSCalendarData() as! KSCalendarDataSource)
+        KSCalendarView(calendar: PreviewData())
     }
 }
 
