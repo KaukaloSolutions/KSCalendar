@@ -53,7 +53,7 @@ struct CalendarYearGrid_Previews: PreviewProvider {
     
     struct CalendarYearGridWrapper: View {
         
-        @StateObject var calendar = KSCalendarViewModel(calendarData: KSCalendarData())
+        @StateObject var calendar = KSCalendarViewModel(calendarData: KSCalendarData() as! KSCalendarDataSource)
         var body: some View {
             KSCalendarYearGrid()
                 .environmentObject(calendar)

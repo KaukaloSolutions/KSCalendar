@@ -9,6 +9,17 @@ import Foundation
 import Combine
 
 
+public protocol KSCalendarDataSource where Self: KSCalendarData {
+    // MARK: - API
+    ///  A  method to receive all day items for given month  month and year
+    /// - Parameters:
+    ///   - month: Calendar month 1...12
+    ///   - year: Calendar year, for example 2022
+    /// - Returns: CalendarDayItems on Array
+    func calendarDayItems(for month: Int, and year: Int) -> [KSCalendarDayItem]
+}
+
+
 public struct KSCalendarDayItem {
     let day: Int
     public var hasPrimaryEvent: Bool
@@ -32,17 +43,6 @@ open class KSCalendarData {
     public init() {}
     
     
-    // MARK: - API
-    ///  A  method to receive all day items for given month  month and year
-    /// - Parameters:
-    ///   - month: Calendar month 1...12
-    ///   - year: Calendar year, for example 2022
-    /// - Returns: CalendarDayItems on Array
-    open func calendarDayItems(for month: Int, and year: Int) -> [KSCalendarDayItem] {
-
-        return []
-    }
-    
     /// Calling this method starts KSCalendarView update. Should be called when calendar data has been updated
     final public func calendarDataHasBeenUpdated() {
         _updated.send()
@@ -51,7 +51,7 @@ open class KSCalendarData {
     final public func setMonthViewHidden(_ value: Bool) {
         _hideMonthView.send(value)
     }
-    
+        
 }
 
 

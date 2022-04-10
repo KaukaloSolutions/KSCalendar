@@ -130,7 +130,7 @@ private struct Constants {
 struct CalendarMonthGrid_Previews: PreviewProvider {
     
     struct CalendarMonthGridWrapper: View {
-        @StateObject var calendar = KSCalendarViewModel(calendarData: KSCalendarData())
+        @StateObject var calendar = KSCalendarViewModel(calendarData: KSCalendarData() as! KSCalendarDataSource)
         var body: some View {
             KSCalendarMonthGrid(month: 1, year: 2022)
                 .environmentObject(calendar)

@@ -14,8 +14,6 @@ public protocol KSCalendarDelegate: AnyObject {
     func didChangeView(toMonthView: Bool)
     func didChangeDate(to date: Date)
     func didChangeGeometry(to size: CGSize)
-    func yearChangeIntent()
-    func monthChangeIntent()
 }
 
 public extension Notification.Name {
@@ -45,9 +43,10 @@ class KSCalendarViewModel: ObservableObject {
     
     private weak var delegate: KSCalendarDelegate?
     
+    
     @Published private var update = false
     @Published private(set) var monthViewIsHidded: Bool
-    private var calendarData: KSCalendarData
+    private var calendarData: KSCalendarDataSource
     private var cancellables: Set<AnyCancellable> = []
     private var currentDate: Date
     private var selectedDate: Date {
@@ -63,7 +62,7 @@ class KSCalendarViewModel: ObservableObject {
     ///   - calendarData: An object having calendar data inheriting from CalendarData
     ///   - hideMonthView: if monthView needs to be hidden set true, default = false
     ///   - delegate: delegate object conforming to KSCalendarDelegate, default = nil
-    init(calendarData: KSCalendarData, hideMonthView: Bool = false, delegate: KSCalendarDelegate? = nil) {
+    init(calendarData: KSCalendarDataSource, hideMonthView: Bool = false, delegate: KSCalendarDelegate? = nil) {
         self.currentDate = calendar.startOfDay(for: Date())
         self.selectedDate = currentDate
         self.calendarData = calendarData
@@ -171,22 +170,18 @@ class KSCalendarViewModel: ObservableObject {
     }
     
     func nextMonth() {
-        sendMonthChangeIntent()
         setSelectedDate(on: .month, by: 1)
     }
     
     func previousMonth() {
-        sendMonthChangeIntent()
         setSelectedDate(on: .month, by: -1)
     }
     
     func nextYear() {
-        sendYearChangeIntent()
         setSelectedDate(on: .year, by: 1)
     }
     
     func previousYear() {
-        sendYearChangeIntent()
         setSelectedDate(on: .year, by: -1)
     }
     
@@ -195,7 +190,7 @@ class KSCalendarViewModel: ObservableObject {
     }
     
     func currentSize(_ size: CGSize) {
-        delegate?.didChangeGeometry(to: size)
+        didChangeGeometry(to: size)
     }
     
     
@@ -237,8 +232,7 @@ class KSCalendarViewModel: ObservableObject {
     
     private func startOfWeekFillDates(for month: Int, and year: Int) -> [DayItem] {
         (0..<firstDay(on: month, in: year))
-            .map { DayItem(id: $0, day: nil)
-            }
+            .map { DayItem(id: $0, day: nil) }
     }
     
     private func daysRange(for  month: Int, and year: Int) -> Range<Int> {
@@ -265,18 +259,12 @@ class KSCalendarViewModel: ObservableObject {
                                         userInfo: ["date": date])
     }
     
-    private func sendMonthChangeIntent() {
-        delegate?.monthChangeIntent()
+    private func didChangeGeometry(to size: CGSize) {
+        delegate?.didChangeGeometry(to: size)
         NotificationCenter.default.post(name: Notification.Name.ksCalendar,
                                         object: self,
-                                        userInfo: ["monthChangeIntent": true])
+                                        userInfo: ["geometry": size])
     }
     
-    private func sendYearChangeIntent() {
-        delegate?.yearChangeIntent()
-        NotificationCenter.default.post(name: Notification.Name.ksCalendar,
-                                        object: self,
-                                        userInfo: ["yearChangeIntent": true])
-    }
     
 }
