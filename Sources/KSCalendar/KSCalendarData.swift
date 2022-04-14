@@ -19,18 +19,10 @@ public protocol KSCalendarDataSource where Self: KSCalendarData {
     func calendarDayItems(for month: Int, and year: Int) -> [KSCalendarDayItem]
 }
 
-
-public struct KSCalendarDayItem {
-    let day: Int
-    public var hasPrimaryEvent: Bool
-    public var hasSecondaryEvent: Bool
-    
-    public init(day: Int, hasPrimaryEvent: Bool = false, hasSecondaryEvent: Bool = false) {
-        self.day = day
-        self.hasPrimaryEvent = hasPrimaryEvent
-        self.hasSecondaryEvent = hasSecondaryEvent
-    }
-    
+public protocol KSCalendarDayItem {
+    var day: Int { get }
+    var hasPrimaryEvent: Bool { get set }
+    var hasSecondaryEvent: Bool { get set }
 }
 
 open class KSCalendarData {
@@ -57,10 +49,17 @@ open class KSCalendarData {
 // just for previews
 class PreviewData: KSCalendarData, KSCalendarDataSource {
     
+    struct DayItem: KSCalendarDayItem {
+        let day: Int
+        var hasPrimaryEvent: Bool
+        var hasSecondaryEvent: Bool
+        
+    }
+    
     func calendarDayItems(for month: Int, and year: Int) -> [KSCalendarDayItem] {
-        return [KSCalendarDayItem(day: 1,
-                                hasPrimaryEvent: true,
-                                hasSecondaryEvent: true)]
+        return [DayItem(day: 1,
+                        hasPrimaryEvent: true,
+                        hasSecondaryEvent: true)]
     }
     
     
