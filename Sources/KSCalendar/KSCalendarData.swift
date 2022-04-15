@@ -26,22 +26,22 @@ public protocol KSCalendarDayItem {
     var hasSecondaryEvent: Bool { get set }
 }
 
-public struct KSCalendarColors {
-    let text: Color
-    let currentDay: Color
-    let selectedDay: Color
-    let button: Color
-    let primaryEvent: Color
-    let secondaryEvent: Color
-    
-    public init(text: Color = .gray, currentDay: Color = .red, selectedDay: Color = .purple, button: Color = .blue, primaryEvent: Color = .blue, secondaryEvent: Color = .red) {
-        self.text = text
-        self.currentDay = currentDay
-        self.selectedDay = selectedDay
-        self.button = button
-        self.primaryEvent = primaryEvent
-        self.secondaryEvent = secondaryEvent
-    }
+public protocol KSCalendarColors {
+    var text: Color { get }
+    var currentDay: Color { get }
+    var selectedDay: Color { get }
+    var button: Color { get }
+    var primaryEvent: Color { get }
+    var secondaryEvent: Color { get }
+}
+
+private struct CalendarColors: KSCalendarColors {
+    let text = Color.gray
+    let currentDay = Color.red
+    let selectedDay = Color.purple
+    let button = Color.blue
+    let primaryEvent = Color.blue
+    let secondaryEvent = Color.red
 }
 
 open class KSCalendarData {
@@ -53,7 +53,7 @@ open class KSCalendarData {
     final let colors: KSCalendarColors
     
     public init(calendarColors: KSCalendarColors? = nil) {
-        self.colors = calendarColors ?? KSCalendarColors()
+        self.colors = calendarColors ?? CalendarColors()
     }
     
     
