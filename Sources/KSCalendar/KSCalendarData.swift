@@ -50,7 +50,7 @@ open class KSCalendarData {
     final public var updated: PassthroughSubject<Void, Never> { _updated }
     final private let _hideMonthView = PassthroughSubject<Bool, Never>()
     final public var hideMonthView: PassthroughSubject<Bool, Never> { _hideMonthView }
-    final let colors: KSCalendarColors
+    let colors: KSCalendarColors
     
     public init(calendarColors: KSCalendarColors? = nil) {
         self.colors = calendarColors ?? CalendarColors()
