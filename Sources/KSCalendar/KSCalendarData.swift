@@ -26,7 +26,7 @@ public protocol KSCalendarDayItem {
     var hasSecondaryEvent: Bool { get set }
 }
 
-public protocol KSCalendarColors {
+protocol KSCalendarColors {
     var textColor: Color { get set }
     var currentDayColor: Color { get set }
     var selectedDayColor: Color { get set }
