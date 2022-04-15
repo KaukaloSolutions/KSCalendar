@@ -114,17 +114,17 @@ class KSCalendarViewModel: ObservableObject {
         calendar.component(.month, from: selectedDate)
     }
     
-    var textColor: Color { calendarData.colors.text }
+    var textColor: Color { calendarData.textColor }
     
-    var buttonColor: Color { calendarData.colors.button }
+    var buttonColor: Color { calendarData.buttonColor }
     
-    var currentDayColor: Color { calendarData.colors.currentDay }
+    var currentDayColor: Color { calendarData.currentDayColor }
     
-    var selectedDayColor: Color { calendarData.colors.selectedDay }
+    var selectedDayColor: Color { calendarData.selectedDayColor }
     
-    var primaryEventColor: Color { calendarData.colors.primaryEvent }
+    var primaryEventColor: Color { calendarData.primaryEventColor }
     
-    var secondaryEventColor: Color { calendarData.colors.secondaryEvent }
+    var secondaryEventColor: Color { calendarData.secondaryEventColor }
 
     func items(for month: Int, and year: Int) -> [DayItem] {
         let calendarDayItems = calendarData.calendarDayItems(for: month, and: year)

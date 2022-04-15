@@ -27,35 +27,30 @@ public protocol KSCalendarDayItem {
 }
 
 public protocol KSCalendarColors {
-    var text: Color { get }
-    var currentDay: Color { get }
-    var selectedDay: Color { get }
-    var button: Color { get }
-    var primaryEvent: Color { get }
-    var secondaryEvent: Color { get }
+    var textColor: Color { get set }
+    var currentDayColor: Color { get set }
+    var selectedDayColor: Color { get set }
+    var buttonColor: Color { get set }
+    var primaryEventColor: Color { get set }
+    var secondaryEventColor: Color { get set }
 }
 
-private struct CalendarColors: KSCalendarColors {
-    let text = Color.gray
-    let currentDay = Color.red
-    let selectedDay = Color.purple
-    let button = Color.blue
-    let primaryEvent = Color.blue
-    let secondaryEvent = Color.red
-}
-
-open class KSCalendarData {
+open class KSCalendarData: KSCalendarColors {
     
     final private let _updated = PassthroughSubject<Void, Never>()
     final public var updated: PassthroughSubject<Void, Never> { _updated }
     final private let _hideMonthView = PassthroughSubject<Bool, Never>()
     final public var hideMonthView: PassthroughSubject<Bool, Never> { _hideMonthView }
-    private(set) var colors: KSCalendarColors
     
-    public init(calendarColors: KSCalendarColors? = nil) {
-        self.colors = calendarColors ?? CalendarColors()
-    }
+    // MARK: - KSCalendarColors
+    public var textColor: Color = .gray
+    public var currentDayColor: Color = .red
+    public var selectedDayColor: Color = .purple
+    public var buttonColor: Color = .blue
+    public var primaryEventColor: Color = .blue
+    public var secondaryEventColor: Color = .red
     
+    public init() { }
     
     /// Calling this method starts KSCalendarView update. Should be called when calendar data has been updated
     final public func calendarDataHasBeenUpdated() {
@@ -65,7 +60,8 @@ open class KSCalendarData {
     final public func setMonthViewHidden(_ value: Bool) {
         _hideMonthView.send(value)
     }
-        
+    
+    
 }
 
 
