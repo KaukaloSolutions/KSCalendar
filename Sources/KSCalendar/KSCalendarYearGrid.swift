@@ -51,6 +51,21 @@ struct KSCalendarYearGrid: View {
 
 struct CalendarYearGrid_Previews: PreviewProvider {
     
+    class PreviewData: KSCalendarData, KSCalendarDataSource {
+        struct Item: KSCalendarDayItem {
+            let day: Int
+            var hasPrimaryEvent: Bool
+            var hasSecondaryEvent: Bool
+
+        }
+        
+        func calendarDayItems(for month: Int, and year: Int) -> [KSCalendarDayItem] {
+            return [Item(day: 1,
+                            hasPrimaryEvent: true,
+                            hasSecondaryEvent: true)]
+        }
+    }
+    
     struct CalendarYearGridWrapper: View {
         
         @StateObject var calendar = KSCalendarViewModel(calendarData: PreviewData())
@@ -64,3 +79,5 @@ struct CalendarYearGrid_Previews: PreviewProvider {
         CalendarYearGridWrapper()
     }
 }
+
+

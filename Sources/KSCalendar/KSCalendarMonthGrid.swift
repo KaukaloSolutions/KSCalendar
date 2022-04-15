@@ -30,7 +30,7 @@ struct KSCalendarMonthGrid: View {
                     .overlay {
                         GeometryReader { geometry in
                             Text(weekDay)
-                                .foregroundColor(.gray)
+                                .foregroundColor(calendar.textColor)
                                 .frame(width: geometry.size.width, height: geometry.size.height, alignment: .center)
                                 .font(.system(size: geometry.size.height * Constants.weekdayFontScale))
                         }
@@ -60,8 +60,8 @@ struct KSCalendarMonthGrid: View {
     
     private func date(for item: DayItem) -> some View {
         Circle()
-            .fill(item.isCurrentDate ? Color.red :
-                    (item.isSelectedDate && calendar.isDetail) ? .purple :
+            .fill(item.isCurrentDate ? calendar.currentDayColor :
+                    (item.isSelectedDate && calendar.isDetail) ? calendar.selectedDayColor :
                     .clear)
             .overlay {
                 GeometryReader {geometry in
@@ -89,16 +89,16 @@ struct KSCalendarMonthGrid: View {
     // bit dummy way to get always evenly distributed circles
     @ViewBuilder private func eventCircles(for item: DayItem) -> some View {
         if item.hasPrimaryEvent && item.hasSecondaryEvent {
-            Circle().foregroundColor(.blue)
+            Circle().foregroundColor(calendar.primaryEventColor)
             Circle().foregroundColor(.clear)
-            Circle().foregroundColor(.red)
+            Circle().foregroundColor(calendar.secondaryEventColor)
         } else if item.hasPrimaryEvent {
             Circle().foregroundColor(.clear)
-            Circle().foregroundColor(.blue)
+            Circle().foregroundColor(calendar.primaryEventColor)
             Circle().foregroundColor(.clear)
         } else if item.hasSecondaryEvent {
             Circle().foregroundColor(.clear)
-            Circle().foregroundColor(.red)
+            Circle().foregroundColor(calendar.secondaryEventColor)
             Circle().foregroundColor(.clear)
         } else {
             EmptyView()
@@ -128,6 +128,21 @@ private struct Constants {
 
 
 struct CalendarMonthGrid_Previews: PreviewProvider {
+    
+    class PreviewData: KSCalendarData, KSCalendarDataSource {
+        struct Item: KSCalendarDayItem {
+            let day: Int
+            var hasPrimaryEvent: Bool
+            var hasSecondaryEvent: Bool
+
+        }
+        
+        func calendarDayItems(for month: Int, and year: Int) -> [KSCalendarDayItem] {
+            return [Item(day: 1,
+                            hasPrimaryEvent: true,
+                            hasSecondaryEvent: true)]
+        }
+    }
     
     struct CalendarMonthGridWrapper: View {
         @StateObject var calendar = KSCalendarViewModel(calendarData: PreviewData())

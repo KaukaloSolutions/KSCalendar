@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-
-
 /// A calendar having similar look as DatePicker. Calendar is capable to show
 /// two individual events for each date i.e. primary and secondary.  KSCalendarView requires
 /// to have an object inheriting from CalendarData that is responsible for individual daily items.
@@ -16,6 +14,8 @@ import SwiftUI
 /// Basic initialization:
 ///     CalendarView(:CalendarData)
 public struct KSCalendarView: View {
+    
+   
     
     @StateObject private var calendar: KSCalendarViewModel
     
@@ -73,7 +73,7 @@ public struct KSCalendarView: View {
                 Image(systemName: "chevron.right")
             }
         }
-        .foregroundColor(.blue)
+        .foregroundColor(calendar.buttonColor)
     }
     
     @ViewBuilder func calendar(mode month: Bool) -> some View {
@@ -114,6 +114,23 @@ private struct CalendarItem: Identifiable {
 }
 
 struct ContentView_Previews: PreviewProvider {
+    
+    // just for previews
+    class PreviewData: KSCalendarData, KSCalendarDataSource {
+        struct Item: KSCalendarDayItem {
+            let day: Int
+            var hasPrimaryEvent: Bool
+            var hasSecondaryEvent: Bool
+
+        }
+        
+        func calendarDayItems(for month: Int, and year: Int) -> [KSCalendarDayItem] {
+            return [Item(day: 1,
+                            hasPrimaryEvent: true,
+                            hasSecondaryEvent: true)]
+        }
+    }
+    
     static var previews: some View {
         KSCalendarView(calendar: PreviewData())
     }

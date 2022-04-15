@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import SwiftUI
 
 
 public protocol KSCalendarDataSource where Self: KSCalendarData {
@@ -25,14 +26,35 @@ public protocol KSCalendarDayItem {
     var hasSecondaryEvent: Bool { get set }
 }
 
+public struct KSCalendarColors {
+    let text: Color
+    let currentDay: Color
+    let selectedDay: Color
+    let button: Color
+    let primaryEvent: Color
+    let secondaryEvent: Color
+    
+    public init(text: Color = .gray, currentDay: Color = .red, selectedDay: Color = .purple, button: Color = .blue, primaryEvent: Color = .blue, secondaryEvent: Color = .red) {
+        self.text = text
+        self.currentDay = currentDay
+        self.selectedDay = selectedDay
+        self.button = button
+        self.primaryEvent = primaryEvent
+        self.secondaryEvent = secondaryEvent
+    }
+}
+
 open class KSCalendarData {
     
     final private let _updated = PassthroughSubject<Void, Never>()
     final public var updated: PassthroughSubject<Void, Never> { _updated }
     final private let _hideMonthView = PassthroughSubject<Bool, Never>()
     final public var hideMonthView: PassthroughSubject<Bool, Never> { _hideMonthView }
+    final let colors: KSCalendarColors
     
-    public init() {}
+    public init(calendarColors: KSCalendarColors? = nil) {
+        self.colors = calendarColors ?? KSCalendarColors()
+    }
     
     
     /// Calling this method starts KSCalendarView update. Should be called when calendar data has been updated
@@ -46,24 +68,8 @@ open class KSCalendarData {
         
 }
 
-// just for previews
-class PreviewData: KSCalendarData, KSCalendarDataSource {
-    
-    struct DayItem: KSCalendarDayItem {
-        let day: Int
-        var hasPrimaryEvent: Bool
-        var hasSecondaryEvent: Bool
-        
-    }
-    
-    func calendarDayItems(for month: Int, and year: Int) -> [KSCalendarDayItem] {
-        return [DayItem(day: 1,
-                        hasPrimaryEvent: true,
-                        hasSecondaryEvent: true)]
-    }
-    
-    
-}
+
+
 
 
 

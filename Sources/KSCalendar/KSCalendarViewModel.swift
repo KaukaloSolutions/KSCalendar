@@ -5,9 +5,9 @@
 //  Created by Janne Jussila on 28.1.2022.
 //
 
-//import Foundation
 import Combine
 import UIKit
+import SwiftUI
 
 
 public protocol KSCalendarDelegate: AnyObject {
@@ -113,6 +113,18 @@ class KSCalendarViewModel: ObservableObject {
     var selectedMonth: Int {
         calendar.component(.month, from: selectedDate)
     }
+    
+    var textColor: Color { calendarData.colors.text }
+    
+    var buttonColor: Color { calendarData.colors.button }
+    
+    var currentDayColor: Color { calendarData.colors.currentDay }
+    
+    var selectedDayColor: Color { calendarData.colors.selectedDay }
+    
+    var primaryEventColor: Color { calendarData.colors.primaryEvent }
+    
+    var secondaryEventColor: Color { calendarData.colors.secondaryEvent }
 
     func items(for month: Int, and year: Int) -> [DayItem] {
         let calendarDayItems = calendarData.calendarDayItems(for: month, and: year)
