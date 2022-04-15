@@ -22,9 +22,10 @@ public struct KSCalendarView: View {
     /// CalendarView init
     /// - Parameter calendar: an object inferitng from CalendarData
     /// - Parameter hideMonthView: in case monthView is not needed, set true, default = false
-    public init(calendar: KSCalendarDataSource, hideMonthView: Bool = false, delegate: KSCalendarDelegate? = nil) {
+    public init(calendar: KSCalendarDataSource, hideMonthView: Bool = false, hideSecondaryEvent: Bool = false, delegate: KSCalendarDelegate? = nil) {
         self._calendar = StateObject(wrappedValue: KSCalendarViewModel(calendarData: calendar,
                                                                        hideMonthView: hideMonthView,
+                                                                       hideSecondaryEvent: hideSecondaryEvent,
                                                                        delegate: delegate))
     }
     

@@ -46,6 +46,7 @@ class KSCalendarViewModel: ObservableObject {
     
     @Published private var update = false
     @Published private(set) var monthViewIsHidded: Bool
+    private var hideSecondaryEvent: Bool
     private var calendarData: KSCalendarDataSource
     private var cancellables: Set<AnyCancellable> = []
     private var currentDate: Date
@@ -62,11 +63,12 @@ class KSCalendarViewModel: ObservableObject {
     ///   - calendarData: An object having calendar data inheriting from CalendarData
     ///   - hideMonthView: if monthView needs to be hidden set true, default = false
     ///   - delegate: delegate object conforming to KSCalendarDelegate, default = nil
-    init(calendarData: KSCalendarDataSource, hideMonthView: Bool = false, delegate: KSCalendarDelegate? = nil) {
+    init(calendarData: KSCalendarDataSource, hideMonthView: Bool = false, hideSecondaryEvent: Bool = false, delegate: KSCalendarDelegate? = nil) {
         self.currentDate = calendar.startOfDay(for: Date())
         self.selectedDate = currentDate
         self.calendarData = calendarData
         self.monthViewIsHidded = hideMonthView
+        self.hideSecondaryEvent = hideSecondaryEvent
         self.delegate = delegate
         setCalendarDataSubscribers()
     }
@@ -78,6 +80,7 @@ class KSCalendarViewModel: ObservableObject {
                 self.update.toggle()
             }
             .store(in: &cancellables)
+        guard !monthViewIsHidded else { return }
         calendarData.hideMonthView
             .receive(on: RunLoop.main)
             .assign(to: \.monthViewIsHidded, on: self)
@@ -102,17 +105,11 @@ class KSCalendarViewModel: ObservableObject {
         (0..<7).map { calendar.shortWeekdaySymbols[($0 + calendar.firstWeekday - 1) % 7] }
     }
     
-    var months: [String] {
-        calendar.shortMonthSymbols
-    }
+    var months: [String] { calendar.shortMonthSymbols }
     
-    var selectedYear: Int {
-        calendar.component(.year, from: selectedDate)
-    }
+    var selectedYear: Int { calendar.component(.year, from: selectedDate) }
     
-    var selectedMonth: Int {
-        calendar.component(.month, from: selectedDate)
-    }
+    var selectedMonth: Int { calendar.component(.month, from: selectedDate) }
     
     var textColor: Color { calendarData.textColor }
     
@@ -134,7 +131,7 @@ class KSCalendarViewModel: ObservableObject {
                 var dayItem = item
                 if let calendarDayItem = calendarDayItems.first(where: { String($0.day) == dayItem.day }) {
                     dayItem.hasPrimaryEvent = calendarDayItem.hasPrimaryEvent
-                    dayItem.hasSecondaryEvent = calendarDayItem.hasSecondaryEvent
+                    dayItem.hasSecondaryEvent = hideSecondaryEvent ? false : calendarDayItem.hasSecondaryEvent
                 }
                 dayItem.isCurrentDate = calendar.isDate(currentDate,
                                                         equalTo: DateComponents(calendar: calendar,
