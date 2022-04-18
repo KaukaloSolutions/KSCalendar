@@ -63,7 +63,7 @@ class KSCalendarViewModel: ObservableObject {
     ///   - calendarData: An object having calendar data inheriting from CalendarData
     ///   - hideMonthView: if monthView needs to be hidden set true, default = false
     ///   - delegate: delegate object conforming to KSCalendarDelegate, default = nil
-    init(calendarData: KSCalendarDataSource, hideMonthView: Bool = false, hideSecondaryEvent: Bool = false, delegate: KSCalendarDelegate? = nil) {
+    init(calendarData: KSCalendarDataSource, selectedDate: Date, hideMonthView: Bool = false, hideSecondaryEvent: Bool = false, delegate: KSCalendarDelegate? = nil) {
         self.currentDate = calendar.startOfDay(for: Date())
         self.selectedDate = currentDate
         self.calendarData = calendarData

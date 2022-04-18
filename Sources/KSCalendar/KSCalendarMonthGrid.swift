@@ -145,7 +145,7 @@ struct CalendarMonthGrid_Previews: PreviewProvider {
     }
     
     struct CalendarMonthGridWrapper: View {
-        @StateObject var calendar = KSCalendarViewModel(calendarData: PreviewData())
+        @StateObject var calendar = KSCalendarViewModel(calendarData: PreviewData(), selectedDate: Date())
         var body: some View {
             KSCalendarMonthGrid(month: 1, year: 2022)
                 .environmentObject(calendar)
