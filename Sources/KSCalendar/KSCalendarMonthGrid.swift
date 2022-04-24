@@ -47,7 +47,7 @@ struct KSCalendarMonthGrid: View {
                     date(for: item)
                     events(for: item)
                 }
-                .aspectRatio(1, contentMode: .fill)
+                .aspectRatio(2, contentMode: .fill)
                 .padding(calendar.isDetail ? 5 : 0)
                 .onTapGesture {
                     guard let day = item.day else { return }
