@@ -123,7 +123,7 @@ private struct Constants {
     static let fontScale: CGFloat = 0.5
     static let weekdayFontScale: CGFloat = 0.7
     static let circleScale: CGFloat = 0.4
-    static let circleOffset: CGFloat = 3
+    static let circleOffset: CGFloat = 1.4
 }
 
 
