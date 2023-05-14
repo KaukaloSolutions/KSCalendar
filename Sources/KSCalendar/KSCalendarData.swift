@@ -35,7 +35,7 @@ protocol KSCalendarColors {
     var secondaryEventColor: Color { get set }
 }
 
-open class KSCalendarData: KSCalendarColors {
+open class KSCalendarData: KSCalendarColors, KSCalendarDataSource {
     
     final private let _updated = PassthroughSubject<Void, Never>()
     final public var updated: PassthroughSubject<Void, Never> { _updated }
@@ -61,6 +61,8 @@ open class KSCalendarData: KSCalendarColors {
         _hideMonthView.send(value)
     }
     
+    // MARK: - KSCalendarDataSource
+    open func calendarDayItems(for month: Int, and year: Int) -> [KSCalendarDayItem] { [] }
     
 }
 
