@@ -97,7 +97,7 @@ public struct KSCalendarView: View {
     
     
     private func swipeGesture(left: @escaping () -> Void, right: @escaping () -> Void) -> _EndedGesture<DragGesture> {
-       DragGesture(minimumDistance: 100)
+        DragGesture(minimumDistance: 100)
             .onEnded { value in
                 guard abs(value.translation.width) > 100 else { return }
                 if value.translation.width < 0 {

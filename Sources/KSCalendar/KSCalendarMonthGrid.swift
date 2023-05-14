@@ -41,7 +41,7 @@ struct KSCalendarMonthGrid: View {
     }
     
     private var dayItems: some View {
-        LazyVGrid(columns: calendarMonthGridItems(), alignment: .center, spacing: 0) {
+        LazyVGrid(columns: dayColumns, alignment: .center, spacing: 0) {
             ForEach(calendar.items(for: month, and: year)) { item in
                 ZStack(alignment: .center) {
                     date(for: item)
@@ -73,17 +73,13 @@ struct KSCalendarMonthGrid: View {
     }
     
     private func events(for item: DayItem) -> some View {
-        Rectangle()
-            .fill(Color.clear)
-            .overlay {
-                GeometryReader { geometry in
-                    HStack(spacing: 2) {
-                        eventCircles(for: item)
-                    }
-                    .scaleEffect(Constants.circleScale)
-                    .offset(CGSize(width: 0, height: geometry.size.height / Constants.circleOffset))
-                }
+        VStack {
+            Spacer()
+            HStack(spacing: 2) {
+                eventCircles(for: item)
             }
+            .scaleEffect(Constants.circleScale)
+        }
     }
     
     // bit dummy way to get always evenly distributed circles
@@ -105,12 +101,7 @@ struct KSCalendarMonthGrid: View {
         }
     }
     
-    private func calendarMonthGridItems() -> [GridItem] {
-        var gridItem = GridItem()
-        gridItem.spacing = 0
-        return (0...6).map { _ in gridItem }
-    }
-    
+    private var dayColumns: [GridItem] { (0...6).map { _ in GridItem(spacing: 0) } }
     
     private func sizeForDay(in size: CGSize) -> CGSize {
         let width = floor(size.width / CGFloat(7))
@@ -123,7 +114,6 @@ private struct Constants {
     static let fontScale: CGFloat = 0.5
     static let weekdayFontScale: CGFloat = 0.7
     static let circleScale: CGFloat = 0.4
-    static let circleOffset: CGFloat = 1.4
 }
 
 
